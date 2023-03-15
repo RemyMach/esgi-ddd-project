@@ -1,4 +1,3 @@
 package com.example.model;
 
-public class ReservationId {
-}
+public record ReservationId(String id) { }
