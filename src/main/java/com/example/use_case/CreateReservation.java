@@ -1,8 +1,13 @@
 package com.example.use_case;
 
-public class CreateReservation {
+import java.time.LocalDateTime;
 
-    public void execute() {
-        System.out.println("CreateReservation");
-    }
-}
+public record CreateReservation (
+    LocalDateTime startedAt,
+    LocalDateTime endedAt,
+    String roomId,
+    String prospectId,
+    int numberOfPeople,
+    String[] emailInvitationList,
+    String reservationDescription
+) {}
