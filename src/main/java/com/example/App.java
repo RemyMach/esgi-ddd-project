@@ -1,9 +1,9 @@
 package com.example;
 
-import com.example.infrastructure.ProspectsInMemory;
+import com.example.infrastructure.ProspectDaoInMemory;
 import com.example.infrastructure.ReservationsInMemory;
 import com.example.infrastructure.RoomsInMemory;
-import com.example.model.Prospects;
+import com.example.model.ProspectDao;
 import com.example.model.Reservations;
 import com.example.model.Rooms;
 import com.example.use_case.CreateReservation;
@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 public class App
 {
     public static void main( String[] args ) {
-        Reservations reservations = new ReservationsInMemory();
+        /*Reservations reservations = new ReservationsInMemory();
         Rooms rooms = new RoomsInMemory();
-        Prospects prospects = new ProspectsInMemory();
+        ProspectDao prospectDao = new ProspectDaoInMemory();
 
-        CreateReservationCommand createReservationCommand = new CreateReservationCommand(reservations, rooms, prospects);
+        CreateReservationCommand createReservationCommand = new CreateReservationCommand(reservations, rooms, prospectDao);
         CreateReservation createReservation = new CreateReservation(
             LocalDateTime.of(2021, 1, 1, 10, 0),
                 LocalDateTime.of(2021, 1, 1, 11, 0),
@@ -32,7 +32,7 @@ public class App
             createReservationCommand.execute(createReservation);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
+        }*/
     }
 
     public String getMessage() {
