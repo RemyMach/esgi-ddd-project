@@ -1,7 +1,9 @@
 package com.example;
 
 import com.example.infrastructure.ReservationsInMemory;
+import com.example.infrastructure.RoomsInMemory;
 import com.example.model.Reservations;
+import com.example.model.Rooms;
 import com.example.use_case.CreateReservation;
 import com.example.use_case.CreateReservationCommand;
 
@@ -11,7 +13,8 @@ public class App
 {
     public static void main( String[] args ) {
         Reservations reservations = new ReservationsInMemory();
-        CreateReservationCommand createReservationCommand = new CreateReservationCommand(reservations);
+        Rooms rooms = new RoomsInMemory();
+        CreateReservationCommand createReservationCommand = new CreateReservationCommand(reservations, rooms);
         CreateReservation createReservation = new CreateReservation(
             LocalDateTime.of(2021, 1, 1, 10, 0),
                 LocalDateTime.of(2021, 1, 1, 11, 0),

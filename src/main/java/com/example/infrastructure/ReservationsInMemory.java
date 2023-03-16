@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class ReservationsInMemory implements Reservations {
     final List<Reservation> reservations = Arrays.asList(
@@ -30,6 +29,16 @@ public class ReservationsInMemory implements Reservations {
     }
 
     @Override
+    public Reservation read(String id) {
+        return null;
+    }
+
+    @Override
+    public List<Reservation> read() {
+        return this.reservations;
+    }
+
+    @Override
     public List<Reservation> getReservationsByProspectForADate(String prospectId, LocalDate date) {
         List<Reservation> reservations = new ArrayList<>();
         for (Reservation reservation : this.reservations) {
@@ -39,4 +48,6 @@ public class ReservationsInMemory implements Reservations {
         }
         return reservations;
     }
+
+
 }

@@ -9,16 +9,16 @@ public class Reservation {
     private final String roomId;
     private final String prospectId;
     private final int numberOfPeople;
-    private final String descritpion;
+    private final String description;
 
-    public Reservation(ReservationId reservationId, LocalDateTime startedAt, LocalDateTime endedAt, String roomId, String prospectId, int numberOfPeople, String descritpion) {
+    public Reservation(ReservationId reservationId, LocalDateTime startedAt, LocalDateTime endedAt, String roomId, String prospectId, int numberOfPeople, String description) {
         this.reservationId = reservationId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
         this.roomId = roomId;
         this.prospectId = prospectId;
         this.numberOfPeople = numberOfPeople;
-        this.descritpion = descritpion;
+        this.description = description;
     }
 
     public ReservationId getReservationId() {
@@ -45,7 +45,11 @@ public class Reservation {
         return numberOfPeople;
     }
 
-    public String getDescritpion() {
-        return descritpion;
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isOverlapping(LocalDateTime startedAt, LocalDateTime endedAt) {
+        return this.startedAt.isBefore(endedAt) && this.endedAt.isAfter(startedAt);
     }
 }
