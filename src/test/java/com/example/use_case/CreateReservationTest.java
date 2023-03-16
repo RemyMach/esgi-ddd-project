@@ -3,6 +3,7 @@ package com.example.use_case;
 import com.example.infrastructure.ReservationsInMemory;
 import com.example.infrastructure.RoomsInMemory;
 import com.example.model.Prospect;
+import com.example.model.ProspectId;
 import com.example.model.Reservations;
 import com.example.model.Rooms;
 import com.example.use_case.exceptions.*;
@@ -22,7 +23,7 @@ public class CreateReservationTest {
 
     @Before()
     public void setUp() {
-        this.prospect = new Prospect("1");
+        this.prospect = new Prospect(new ProspectId("1"));
         this.reservations = new ReservationsInMemory();
         this.rooms = new RoomsInMemory();
         this.createReservationCommand = new CreateReservationCommand(this.reservations, this.rooms);

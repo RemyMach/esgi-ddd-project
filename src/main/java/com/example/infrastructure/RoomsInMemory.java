@@ -14,12 +14,12 @@ public class RoomsInMemory implements Rooms {
     );
 
     @Override
-    public Room getById(String id) {
-        return this.rooms.stream().filter(room -> room.getId().value.equals(id)).findFirst().orElse(null);
+    public Room getById(RoomId id) {
+        return this.rooms.stream().filter(room -> room.getId().equals(id)).findFirst().orElse(null);
     }
 
     @Override
-    public boolean exists(String id) {
-        return this.rooms.stream().anyMatch(room -> room.getId().value.equals(id));
+    public boolean exists(RoomId id) {
+        return this.rooms.stream().anyMatch(room -> room.getId().equals(id));
     }
 }

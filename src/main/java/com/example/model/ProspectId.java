@@ -2,10 +2,10 @@ package com.example.model;
 
 import java.util.Objects;
 
-public class RoomId {
+public class ProspectId {
     private final String value;
 
-    public RoomId(String value) {
+    public ProspectId(String value) {
         this.value = value;
     }
 
@@ -17,7 +17,7 @@ public class RoomId {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RoomId roomId = (RoomId) o;
+        ProspectId roomId = (ProspectId) o;
         return Objects.equals(value, roomId.value);
     }
 

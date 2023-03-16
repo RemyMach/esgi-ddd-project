@@ -1,13 +1,13 @@
 package com.example.model;
 
 public class Prospect {
-    private final String id;
+    private final ProspectId id;
 
-    public Prospect(String id) {
+    public Prospect(ProspectId id) {
         this.id = id;
     }
 
-    public String getId() {
+    public ProspectId getId() {
         return id;
     }
 }

@@ -6,12 +6,12 @@ public class Reservation {
     private final ReservationId reservationId;
     private final LocalDateTime startedAt;
     private final LocalDateTime endedAt;
-    private final String roomId;
-    private final String prospectId;
+    private final RoomId roomId;
+    private final ProspectId prospectId;
     private final int numberOfPeople;
     private final String description;
 
-    public Reservation(ReservationId reservationId, LocalDateTime startedAt, LocalDateTime endedAt, String roomId, String prospectId, int numberOfPeople, String description) {
+    public Reservation(ReservationId reservationId, LocalDateTime startedAt, LocalDateTime endedAt, RoomId roomId, ProspectId prospectId, int numberOfPeople, String description) {
         this.reservationId = reservationId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
@@ -33,11 +33,11 @@ public class Reservation {
         return endedAt;
     }
 
-    public String getRoomId() {
+    public RoomId getRoomId() {
         return roomId;
     }
 
-    public String getProspectId() {
+    public ProspectId getProspectId() {
         return prospectId;
     }
 

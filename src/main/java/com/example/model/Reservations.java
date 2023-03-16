@@ -7,5 +7,5 @@ public interface Reservations {
     Reservation create(Reservation reservation);
     Reservation read(String id);
     List<Reservation> read();
-    List<Reservation> getReservationsByProspectForADate(String prospectId, LocalDate date);
+    List<Reservation> getReservationsByProspectForADate(ProspectId prospectId, LocalDate date);
 }
