@@ -4,7 +4,6 @@ import com.example.infrastructure.ReservationsInMemory;
 import com.example.model.Reservations;
 import com.example.use_case.CreateReservation;
 import com.example.use_case.CreateReservationCommand;
-import com.example.use_case.InvalidProspectAvailabilityException;
 
 import java.time.LocalDateTime;
 
