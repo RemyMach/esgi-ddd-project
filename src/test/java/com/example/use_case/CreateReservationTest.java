@@ -1,11 +1,9 @@
 package com.example.use_case;
 
+import com.example.infrastructure.ProspectsInMemory;
 import com.example.infrastructure.ReservationsInMemory;
 import com.example.infrastructure.RoomsInMemory;
-import com.example.model.Prospect;
-import com.example.model.ProspectId;
-import com.example.model.Reservations;
-import com.example.model.Rooms;
+import com.example.model.*;
 import com.example.use_case.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +17,7 @@ public class CreateReservationTest {
     Prospect prospect;
     Reservations reservations;
     Rooms rooms;
+    Prospects prospects;
     CreateReservationCommand createReservationCommand;
 
     @Before()
@@ -26,7 +25,8 @@ public class CreateReservationTest {
         this.prospect = new Prospect(new ProspectId("1"));
         this.reservations = new ReservationsInMemory();
         this.rooms = new RoomsInMemory();
-        this.createReservationCommand = new CreateReservationCommand(this.reservations, this.rooms);
+        this.prospects = new ProspectsInMemory();
+        this.createReservationCommand = new CreateReservationCommand(this.reservations, this.rooms, this.prospects);
     }
 
     @Test()
@@ -145,5 +145,23 @@ public class CreateReservationTest {
         );
 
         assertThrows(NotEnoughCapacityException.class , () -> this.createReservationCommand.execute(reservation));
+    }
+
+    @Test()
+    public void TheProspectShouldExist() {
+        LocalDateTime startingTime = LocalDateTime.of(2025, 1, 1, 9, 30);
+        LocalDateTime endingTime = LocalDateTime.of(2025, 1, 1, 10, 30);
+
+        CreateReservation reservation = new CreateReservation(
+                startingTime,
+                endingTime,
+                "1",
+                "-1",
+                2,
+                new String[] { "" },
+                ""
+        );
+
+        assertThrows(UnknownProspectException.class , () -> this.createReservationCommand.execute(reservation));
     }
 }

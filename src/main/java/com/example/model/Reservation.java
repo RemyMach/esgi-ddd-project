@@ -4,17 +4,15 @@ import java.time.LocalDateTime;
 
 public class Reservation {
     private final ReservationId reservationId;
-    private final LocalDateTime startedAt;
-    private final LocalDateTime endedAt;
+    private final TimeWindow timeWindow;
     private final RoomId roomId;
     private final ProspectId prospectId;
     private final int numberOfPeople;
     private final String description;
 
-    public Reservation(ReservationId reservationId, LocalDateTime startedAt, LocalDateTime endedAt, RoomId roomId, ProspectId prospectId, int numberOfPeople, String description) {
+    public Reservation(ReservationId reservationId, TimeWindow timeWindow, RoomId roomId, ProspectId prospectId, int numberOfPeople, String description) {
         this.reservationId = reservationId;
-        this.startedAt = startedAt;
-        this.endedAt = endedAt;
+        this.timeWindow = timeWindow;
         this.roomId = roomId;
         this.prospectId = prospectId;
         this.numberOfPeople = numberOfPeople;
@@ -22,34 +20,30 @@ public class Reservation {
     }
 
     public ReservationId getReservationId() {
-        return reservationId;
+        return this.reservationId;
     }
 
-    public LocalDateTime getStartedAt() {
-        return startedAt;
-    }
-
-    public LocalDateTime getEndedAt() {
-        return endedAt;
+    public TimeWindow getTimeWindow() {
+        return this.timeWindow;
     }
 
     public RoomId getRoomId() {
-        return roomId;
+        return this.roomId;
     }
 
     public ProspectId getProspectId() {
-        return prospectId;
+        return this.prospectId;
     }
 
     public int getNumberOfPeople() {
-        return numberOfPeople;
+        return this.numberOfPeople;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public boolean isOverlapping(LocalDateTime startedAt, LocalDateTime endedAt) {
-        return this.startedAt.isBefore(endedAt) && this.endedAt.isAfter(startedAt);
+        return this.timeWindow.getStart().isBefore(endedAt) && this.timeWindow.getEnd().isAfter(startedAt);
     }
 }

@@ -10,13 +10,16 @@ import java.util.List;
 public class CreateReservationCommand {
     private final Reservations reservations;
     private final Rooms rooms;
+    private final Prospects prospects;
 
     public CreateReservationCommand(
         Reservations reservations,
-        Rooms rooms
+        Rooms rooms,
+        Prospects prospects
     ) {
         this.reservations = reservations;
         this.rooms = rooms;
+        this.prospects = prospects;
     }
 
     public void execute(CreateReservation createReservation) throws
@@ -24,7 +27,8 @@ public class CreateReservationCommand {
             ReservationInPastException,
             ReservationAtLeastOneHourBeforeException,
             UnavailableRoomException,
-            NotEnoughCapacityException {
+            NotEnoughCapacityException,
+            UnknownProspectException {
 
         final Room room = new Room(new RoomId(createReservation.roomId()), createReservation.numberOfPeople());
         final Prospect prospect = new Prospect(new ProspectId(createReservation.prospectId()));
@@ -32,6 +36,11 @@ public class CreateReservationCommand {
         // la salle doit exister
         if (!this.rooms.exists(room.getId())) {
             throw new UnavailableRoomException("La salle n'existe pas");
+        }
+
+        // le prospect doit exister
+        if (!this.prospects.exists(prospect.getId())) {
+            throw new UnknownProspectException("Le prospect n'existe pas");
         }
 
         // la date ne doit pas être dans le passé
@@ -46,10 +55,10 @@ public class CreateReservationCommand {
         // un prospect ne peux réserver que si il a pas de résa à ce créneau
         List<Reservation> reservationsAlreadyBookedForTheUser = this.reservations.getReservationsByProspectForADate(prospect.getId(), createReservation.startedAt().toLocalDate());
         boolean userHasAlreadyAReservation = reservationsAlreadyBookedForTheUser.stream().anyMatch(reservation -> {
-            if (reservation.getStartedAt().isAfter(createReservation.endedAt())
-                    || reservation.getEndedAt().isBefore(createReservation.startedAt())
-                    || reservation.getStartedAt().equals(createReservation.endedAt())
-                    || reservation.getEndedAt().equals(createReservation.startedAt())) {
+            if (reservation.getTimeWindow().getStart().isAfter(createReservation.endedAt())
+                    || reservation.getTimeWindow().getEnd().isBefore(createReservation.startedAt())
+                    || reservation.getTimeWindow().getStart().equals(createReservation.endedAt())
+                    || reservation.getTimeWindow().getEnd().equals(createReservation.startedAt())) {
                 return false;
             }
             return true;
