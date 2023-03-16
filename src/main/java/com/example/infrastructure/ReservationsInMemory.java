@@ -1,6 +1,7 @@
 package com.example.infrastructure;
 
-import com.example.model.*;
+import com.example.model.reservation.*;
+import com.example.model.room.RoomId;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

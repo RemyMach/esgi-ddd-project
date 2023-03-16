@@ -1,16 +1,5 @@
 package com.example;
 
-import com.example.infrastructure.ProspectDaoInMemory;
-import com.example.infrastructure.ReservationsInMemory;
-import com.example.infrastructure.RoomsInMemory;
-import com.example.model.ProspectDao;
-import com.example.model.Reservations;
-import com.example.model.Rooms;
-import com.example.use_case.CreateReservation;
-import com.example.use_case.CreateReservationCommand;
-
-import java.time.LocalDateTime;
-
 public class App
 {
     public static void main( String[] args ) {

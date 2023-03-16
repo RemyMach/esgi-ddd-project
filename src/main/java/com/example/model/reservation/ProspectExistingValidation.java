@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.reservation;
 
 import com.example.use_case.exceptions.ProspectNotFoundException;
 

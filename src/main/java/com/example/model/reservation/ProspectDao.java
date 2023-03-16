@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.reservation;
 
 public interface ProspectDao {
     boolean exists(ProspectId id);

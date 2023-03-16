@@ -1,11 +1,11 @@
-package com.example.model;
+package com.example.model.reservation;
 
 import java.util.Objects;
 
-public class RoomId {
+public class ReservationId{
     private final String value;
 
-    public RoomId(String value) {
+    public ReservationId(String value) {
         this.value = value;
     }
 
@@ -17,8 +17,8 @@ public class RoomId {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RoomId roomId = (RoomId) o;
-        return Objects.equals(value, roomId.value);
+        ReservationId that = (ReservationId) o;
+        return Objects.equals(value, that.value);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.example.infrastructure;
 
-import com.example.model.Room;
-import com.example.model.RoomId;
-import com.example.model.Rooms;
+import com.example.model.room.Room;
+import com.example.model.room.RoomId;
+import com.example.model.room.Rooms;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,6 +1,7 @@
 package com.example.infrastructure;
 
-import com.example.model.*;
+import com.example.model.reservation.ProspectDao;
+import com.example.model.reservation.ProspectId;
 
 import java.util.Arrays;
 import java.util.List;

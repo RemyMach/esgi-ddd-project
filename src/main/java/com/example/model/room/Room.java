@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.room;
 
 public class Room {
     private final RoomId id;
@@ -8,6 +8,7 @@ public class Room {
         this.id = id;
         this.capacity = capacity;
     }
+
 
     public RoomId getId() {
         return this.id;

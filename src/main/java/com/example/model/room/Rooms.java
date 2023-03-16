@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.room;
 
 public interface Rooms {
     Room getById(RoomId id);

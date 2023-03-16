@@ -1,12 +1,11 @@
 package com.example.use_case;
 
-import com.example.model.*;
+import com.example.model.reservation.*;
+import com.example.model.room.RoomExistingValidation;
+import com.example.model.room.RoomId;
+import com.example.model.room.Rooms;
 import com.example.use_case.common.IdGenerator;
 import com.example.use_case.exceptions.*;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class CreateReservationCommand {
     private final Reservations reservations;
@@ -35,12 +34,12 @@ public class CreateReservationCommand {
             NotEnoughCapacityException,
             ProspectNotFoundException, RoomNotFoundException {
 
-        final Room room = new Room(new RoomId(createReservation.roomId()), createReservation.numberOfPeople());
+        final RoomId roomId = new RoomId(createReservation.roomId());
         final ProspectId prospectId = new ProspectId(createReservation.prospectId());
 
         // la salle doit exister
         final RoomExistingValidation roomExistingValidation = new RoomExistingValidation(this.rooms);
-        roomExistingValidation.check(room.getId());
+        roomExistingValidation.check(roomId);
 
         // le prospect doit exister
         final ProspectExistingValidation prospectExistingValidation = new ProspectExistingValidation(this.prospectDao);
@@ -49,7 +48,7 @@ public class CreateReservationCommand {
         final Reservation reservation = new Reservation(
                 new ReservationId(idGenerator.generate()),
                 new TimeWindow(createReservation.startedAt(), createReservation.endedAt()),
-                room.getId(),
+                roomId,
                 prospectId,
                 createReservation.numberOfPeople(),
                 createReservation.reservationDescription()
@@ -57,32 +56,14 @@ public class CreateReservationCommand {
         reservation.checkIfIsValid();
 
         // un prospect ne peux réserver que si il a pas de résa à ce créneau
-        List<Reservation> reservationsAlreadyBookedForTheUser = this.reservations.getReservationsByProspectForADate(prospectId, createReservation.startedAt().toLocalDate());
-        boolean userHasAlreadyAReservation = reservationsAlreadyBookedForTheUser.stream().anyMatch(reservationFind -> {
-            if (reservationFind.getTimeWindow().getStart().isAfter(createReservation.endedAt())
-                    || reservationFind.getTimeWindow().getEnd().isBefore(createReservation.startedAt())
-                    || reservationFind.getTimeWindow().getStart().equals(createReservation.endedAt())
-                    || reservationFind.getTimeWindow().getEnd().equals(createReservation.startedAt())) {
-                return false;
-            }
-            return true;
-        });
-
-        if (userHasAlreadyAReservation) {
-            throw new InvalidProspectAvailabilityException("Le prospect a déjà une réservation à ce créneau");
-        }
+        CheckProspectAvailability checkProspectAvailability = new CheckProspectAvailability(this.reservations);
+        checkProspectAvailability.check(new TimeWindow(createReservation.startedAt(), createReservation.endedAt()), prospectId);
 
         // la room doit-être dispo
-        boolean isRoomAvailable = this.reservations.read()
-                .stream()
-                .noneMatch(r -> r.isOverlapping(createReservation.startedAt(), createReservation.endedAt()));
-        if (!isRoomAvailable) {
-            throw new UnavailableRoomException("l'espace de travail n'est pas disponible à ce créneau");
-        }
+        CheckRoomTimeWindowAvailability checkRoomTimeWindowAvailability = new CheckRoomTimeWindowAvailability(this.reservations);
+        checkRoomTimeWindowAvailability.check(roomId, new TimeWindow(createReservation.startedAt(), createReservation.endedAt()));
 
         // le nombre de personne de la réservation doit-être inferieur ou égal à la capcité max sur le créneau de la room
-        if (createReservation.numberOfPeople() > this.rooms.getById(room.getId()).getCapacity()) {
-            throw new NotEnoughCapacityException("l'espace de travail n'a pas la capacité d'acceuillir le nombre de personne demandé");
-        }
+        reservation.checkReservationFitInRoomCapacity(this.rooms.getById(roomId).getCapacity());
     }
 }

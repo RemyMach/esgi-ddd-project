@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.reservation;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

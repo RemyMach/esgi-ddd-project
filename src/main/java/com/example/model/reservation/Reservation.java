@@ -1,5 +1,7 @@
-package com.example.model;
+package com.example.model.reservation;
 
+import com.example.model.room.RoomId;
+import com.example.use_case.exceptions.NotEnoughCapacityException;
 import com.example.use_case.exceptions.ReservationAtLeastOneHourBeforeException;
 import com.example.use_case.exceptions.ReservationInPastException;
 
@@ -34,6 +36,13 @@ public class Reservation {
             throw new ReservationAtLeastOneHourBeforeException("La réservation doit-être faite au moins une heure avant la date de début");
         }
     }
+
+    public void checkReservationFitInRoomCapacity(int roomCapacity) throws NotEnoughCapacityException {
+        if (this.getNumberOfPeople() > roomCapacity) {
+            throw new NotEnoughCapacityException("La salle n'a pas assez de place pour cette réservation");
+        }
+    }
+
 
     public ReservationId getReservationId() {
         return this.reservationId;

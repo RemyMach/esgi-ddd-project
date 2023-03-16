@@ -1,11 +1,9 @@
-package com.example.model;
+package com.example.model.room;
 
 import com.example.use_case.exceptions.RoomNotFoundException;
 
 public class RoomExistingValidation {
-
     private final Rooms rooms;
-
     public RoomExistingValidation(Rooms rooms) {
         this.rooms = rooms;
     }
