@@ -69,14 +69,14 @@ public class CreateReservationCommand {
         List<Reservation> reservationsAlreadyBookedForTheProspect = this.reservations.getReservationsByProspectForADate(prospectId, timeWindowCandidate.getStart().toLocalDate());
         List<TimeWindow> timeWindowsAlreadyBookedForTheProspect = reservationsAlreadyBookedForTheProspect.stream().map(Reservation::getTimeWindow).toList();
         if(timeWindowCandidate.overlaps(timeWindowsAlreadyBookedForTheProspect)) {
-            throw new InvalidProspectAvailabilityException("Le prospect a déjà une réservation à ce créneau");
+            throw new InvalidProspectAvailabilityException("A prospect reservation overlaps with this reservation");
         }
 
         // la room doit-être dispo
         List<Reservation> reservationsForARoom = this.reservations.getReservationByRoomId(roomId);
         List<TimeWindow> timeWindowsAlreadyBookedForTheRoom = reservationsForARoom.stream().map(Reservation::getTimeWindow).toList();
         if(timeWindowCandidate.overlaps(timeWindowsAlreadyBookedForTheRoom)) {
-            throw new UnavailableRoomException("l'espace de travail n'est pas disponible à ce créneau");
+            throw new UnavailableRoomException("The room already has a reservation which overlaps with this reservation");
         }
 
         // le nombre de personne de la réservation doit-être inferieur ou égal à la capcité max sur le créneau de la room
