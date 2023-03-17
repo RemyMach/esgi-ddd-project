@@ -16,7 +16,7 @@ public class Reservation {
     private final int numberOfPeople;
     private final String description;
 
-    public Reservation(ReservationId reservationId, TimeWindow timeWindow, RoomId roomId, ProspectId prospectId, int numberOfPeople, String description) {
+    private Reservation(ReservationId reservationId, TimeWindow timeWindow, RoomId roomId, ProspectId prospectId, int numberOfPeople, String description) {
         this.reservationId = reservationId;
         this.timeWindow = timeWindow;
         this.roomId = roomId;
@@ -25,17 +25,17 @@ public class Reservation {
         this.description = description;
     }
 
-    public void checkIfIsValid() throws ReservationInPastException, ReservationAtLeastOneHourBeforeException {
-        // la date ne doit pas être dans le passé
-        if (this.getTimeWindow().getStart().isBefore(LocalDateTime.now())) {
+    public static Reservation of(ReservationId reservationId, TimeWindow timeWindow, RoomId roomId, ProspectId prospectId, int numberOfPeople, String description) throws ReservationInPastException, ReservationAtLeastOneHourBeforeException {
+        if (timeWindow.getStart().isBefore(LocalDateTime.now())) {
             throw new ReservationInPastException("The reservation cannot be in the past");
         }
 
-        // la réservation doit-être fait au moins une heure avant la date de début
-        if (this.getTimeWindow().getStart().isBefore(LocalDateTime.now().plus(1, ChronoUnit.HOURS))) {
+        if (timeWindow.getStart().isBefore(LocalDateTime.now().plus(1, ChronoUnit.HOURS))) {
             throw new ReservationAtLeastOneHourBeforeException("The reservation must be made at least one hour before the start date");
         }
+        return new Reservation(reservationId, timeWindow, roomId, prospectId, numberOfPeople, description);
     }
+
 
     public void checkReservationFitInRoomCapacity(int roomCapacity) throws NotEnoughCapacityException {
         if (this.getNumberOfPeople() > roomCapacity) {

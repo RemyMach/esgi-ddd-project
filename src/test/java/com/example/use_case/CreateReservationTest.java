@@ -35,7 +35,7 @@ public class CreateReservationTest {
     ReservationValidMailSender notificationService;
 
     @Before()
-    public void setUp() throws TimeWindowIllegalEndDateException {
+    public void setUp() throws ReservationAtLeastOneHourBeforeException, ReservationInPastException, TimeWindowIllegalEndDateException {
         this.reservations = new ReservationsInMemory();
         this.rooms = new RoomsInMemory();
         this.prospectDao = new ProspectDaoInMemory();
@@ -108,7 +108,7 @@ public class CreateReservationTest {
     @Test()
     public void AProspectCantDoAReservationInPast() {
 
-        LocalDateTime startedDate = LocalDateTime.now().minus(1, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
+        LocalDateTime startedDate = LocalDateTime.now().minus(1, java.time.temporal.ChronoUnit.DAYS).minus(1, java.time.temporal.ChronoUnit.HOURS);
         LocalDateTime endedAt = LocalDateTime.now().minus(1, ChronoUnit.DAYS);
 
 
