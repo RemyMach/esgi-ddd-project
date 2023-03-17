@@ -1,7 +1,6 @@
 package com.example.use_case;
 
 import com.example.model.reservation.*;
-import com.example.model.room.RoomId;
 import com.example.model.room.Rooms;
 import com.example.use_case.common.IdGenerator;
 import com.example.use_case.common.ReservationRoomPayment;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -219,7 +218,7 @@ public class CreateReservationTest {
         assertEquals(numberOfPeople, reservationCreated.getNumberOfPeople());
         assertEquals(reason, reservationCreated.getDescription());
 
-        verify(paymentService).pay(any(ProspectId.class), any(RoomId.class), any(TimeWindow.class));
-        verify(notificationService).send(any(Reservation.class));
+        verify(paymentService).pay(eq(reservationCreated.getProspectId()), eq(reservationCreated.getRoomId()), eq(reservationCreated.getTimeWindow()));
+        verify(notificationService).send(eq(reservationCreated));
     }
 }
