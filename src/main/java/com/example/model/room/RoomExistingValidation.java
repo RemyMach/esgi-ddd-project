@@ -10,7 +10,7 @@ public class RoomExistingValidation {
 
     public void check(RoomId id) throws RoomNotFoundException {
         if (!this.rooms.exists(id)) {
-            throw new RoomNotFoundException("Room not found");
+            throw new RoomNotFoundException("The room does not exist");
         }
     }
 }

@@ -25,7 +25,7 @@ public class CheckProspectAvailability {
         });
 
         if( userHasAlreadyAReservation) {
-            throw new InvalidProspectAvailabilityException("Le prospect a déjà une réservation à ce créneau");
+            throw new InvalidProspectAvailabilityException("The prospect has already a reservation for this time window");
         }
     }
 }

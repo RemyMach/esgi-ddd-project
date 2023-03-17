@@ -28,18 +28,18 @@ public class Reservation {
     public void checkIfIsValid() throws ReservationInPastException, ReservationAtLeastOneHourBeforeException {
         // la date ne doit pas être dans le passé
         if (this.getTimeWindow().getStart().isBefore(LocalDateTime.now())) {
-            throw new ReservationInPastException("La date de début de la réservation ne doit pas être dans le passé");
+            throw new ReservationInPastException("The reservation cannot be in the past");
         }
 
         // la réservation doit-être fait au moins une heure avant la date de début
         if (this.getTimeWindow().getStart().isBefore(LocalDateTime.now().plus(1, ChronoUnit.HOURS))) {
-            throw new ReservationAtLeastOneHourBeforeException("La réservation doit-être faite au moins une heure avant la date de début");
+            throw new ReservationAtLeastOneHourBeforeException("The reservation must be made at least one hour before the start date");
         }
     }
 
     public void checkReservationFitInRoomCapacity(int roomCapacity) throws NotEnoughCapacityException {
         if (this.getNumberOfPeople() > roomCapacity) {
-            throw new NotEnoughCapacityException("La salle n'a pas assez de place pour cette réservation");
+            throw new NotEnoughCapacityException("The room does not have enough capacity");
         }
     }
 

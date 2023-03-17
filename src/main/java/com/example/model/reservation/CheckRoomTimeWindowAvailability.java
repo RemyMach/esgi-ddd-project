@@ -16,7 +16,7 @@ public class CheckRoomTimeWindowAvailability {
                 .stream()
                 .noneMatch(roomMatch -> roomMatch.isOverlapping(timeWindow.getStart(), timeWindow.getEnd()));
         if (!isRoomAvailable) {
-            throw new UnavailableRoomException("l'espace de travail n'est pas disponible à ce créneau");
+            throw new UnavailableRoomException("The room is not available for the given time window.");
         }
     }
 }
