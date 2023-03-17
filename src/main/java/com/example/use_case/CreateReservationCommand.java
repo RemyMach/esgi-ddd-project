@@ -73,14 +73,16 @@ public class CreateReservationCommand {
         }
 
         // la room doit-être dispo
-        CheckRoomTimeWindowAvailability checkRoomTimeWindowAvailability = new CheckRoomTimeWindowAvailability(this.reservations);
-        checkRoomTimeWindowAvailability.check(roomId, TimeWindow.of(createReservation.startedAt(), createReservation.endedAt()));
+        List<Reservation> reservationsForARoom = this.reservations.getReservationByRoomId(roomId);
+        List<TimeWindow> timeWindowsAlreadyBookedForTheRoom = reservationsForARoom.stream().map(Reservation::getTimeWindow).toList();
+        if(timeWindowCandidate.overlaps(timeWindowsAlreadyBookedForTheRoom)) {
+            throw new UnavailableRoomException("l'espace de travail n'est pas disponible à ce créneau");
+        }
 
         // le nombre de personne de la réservation doit-être inferieur ou égal à la capcité max sur le créneau de la room
         reservation.checkReservationFitInRoomCapacity(this.rooms.getById(roomId).getCapacity());
 
         this.reservationRoomPayment.pay(prospectId, roomId, reservation.getTimeWindow());
-
         this.reservations.create(reservation);
         this.reservationValidMailSender.send(reservation);
 

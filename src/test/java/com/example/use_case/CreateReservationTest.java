@@ -129,9 +129,9 @@ public class CreateReservationTest {
     @Test()
     public void ASiteCantHaveTwoReservationsAtTheSameTime() {
         CreateReservation reservation = new CreateReservation(
-                LocalDateTime.of(2024, 1, 1, 10, 0),
+                LocalDateTime.of(2024, 1, 1, 10, 20),
                 LocalDateTime.of(2024, 1, 1, 11, 0),
-                "2",
+                "1",
                 "2",
                 2,
                 ""

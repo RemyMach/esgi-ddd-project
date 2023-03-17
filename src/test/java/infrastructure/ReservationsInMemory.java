@@ -42,5 +42,16 @@ public class ReservationsInMemory implements Reservations {
         return reservations;
     }
 
+    @Override
+    public List<Reservation> getReservationByRoomId(RoomId roomId) {
+        List<Reservation> reservations = new ArrayList<>();
+        for (Reservation reservation : this.reservations) {
+            if (reservation.getRoomId().equals(roomId)) {
+                reservations.add(reservation);
+            }
+        }
+        return reservations;
+    }
+
 
 }
