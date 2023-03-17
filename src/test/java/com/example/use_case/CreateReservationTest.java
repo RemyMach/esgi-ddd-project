@@ -1,6 +1,5 @@
 package com.example.use_case;
 
-import com.example.infrastructure.*;
 import com.example.model.reservation.*;
 import com.example.model.room.RoomId;
 import com.example.model.room.Rooms;
@@ -8,7 +7,7 @@ import com.example.use_case.common.IdGenerator;
 import com.example.use_case.common.ReservationRoomPayment;
 import com.example.use_case.common.ReservationValidMailSender;
 import com.example.use_case.exceptions.*;
-import infrastructure.IdGeneratorNotRandom;
+import infrastructure.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

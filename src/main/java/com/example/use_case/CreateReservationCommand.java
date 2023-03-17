@@ -77,7 +77,7 @@ public class CreateReservationCommand {
         this.reservationRoomPayment.pay(prospectId, roomId, reservation.getTimeWindow());
 
         this.reservations.create(reservation);
-        this.reservationValidMailSender.send(roomId, reservation);
+        this.reservationValidMailSender.send(reservation);
 
         return reservation;
     }
