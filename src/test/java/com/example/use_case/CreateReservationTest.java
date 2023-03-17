@@ -213,7 +213,7 @@ public class CreateReservationTest {
 
         Reservation reservationCreated = mockedCreateReservationCommand.execute(reservation);
 
-        assertEquals(reservationCreated.getTimeWindow(), new TimeWindow(startingTime, endingTime));
+        assertEquals(reservationCreated.getTimeWindow(), TimeWindow.of(startingTime, endingTime));
         assertEquals(roomId, reservationCreated.getRoomId().getValue());
         assertEquals(prospectId, reservationCreated.getProspectId().getValue());
         assertEquals(numberOfPeople, reservationCreated.getNumberOfPeople());
