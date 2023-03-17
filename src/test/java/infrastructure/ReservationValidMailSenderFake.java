@@ -1,4 +1,4 @@
-package com.example.infrastructure;
+package infrastructure;
 
 import com.example.model.reservation.Reservation;
 import com.example.model.room.RoomId;

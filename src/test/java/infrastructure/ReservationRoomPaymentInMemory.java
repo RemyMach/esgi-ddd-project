@@ -1,4 +1,4 @@
-package com.example.infrastructure;
+package infrastructure;
 
 import com.example.model.reservation.ProspectId;
 import com.example.model.reservation.TimeWindow;
