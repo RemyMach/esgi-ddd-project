@@ -5,5 +5,5 @@ import com.example.model.reservation.Reservation;
 import com.example.model.room.RoomId;
 
 public interface ReservationValidMailSender {
-    void send(RoomId roomId, Reservation reservation);
+    void send(Reservation reservation);
 }
