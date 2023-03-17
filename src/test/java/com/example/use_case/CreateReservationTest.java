@@ -1,15 +1,13 @@
 package com.example.use_case;
 
-import com.example.infrastructure.ProspectDaoInMemory;
-import com.example.infrastructure.ReservationsInMemory;
-import com.example.infrastructure.RoomsInMemory;
-import com.example.infrastructure.UuidIdGenerator;
-import com.example.model.reservation.ProspectDao;
-import com.example.model.reservation.ProspectId;
-import com.example.model.reservation.Reservations;
+import com.example.infrastructure.*;
+import com.example.model.reservation.*;
 import com.example.model.room.Rooms;
 import com.example.use_case.common.IdGenerator;
+import com.example.use_case.common.ReservationRoomPayment;
+import com.example.use_case.common.ReservationValidMailSender;
 import com.example.use_case.exceptions.*;
+import infrastructure.IdGeneratorNotRandom;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,24 +15,27 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class CreateReservationTest {
-    ProspectId prospectId;
     Reservations reservations;
     Rooms rooms;
     ProspectDao prospectDao;
     CreateReservationCommand createReservationCommand;
-
     IdGenerator idGenerator;
+    ReservationRoomPayment reservationRoomPayment;
+
+    ReservationValidMailSender reservationValidMailSender;
 
     @Before()
     public void setUp() {
-        this.prospectId = new ProspectId("1");
         this.reservations = new ReservationsInMemory();
         this.rooms = new RoomsInMemory();
         this.prospectDao = new ProspectDaoInMemory();
-        this.idGenerator = new UuidIdGenerator();
-        this.createReservationCommand = new CreateReservationCommand(this.reservations, this.rooms, this.prospectDao, this.idGenerator);
+        this.idGenerator = new IdGeneratorNotRandom();
+        this.reservationRoomPayment = new ReservationRoomPaymentInMemory();
+        this.reservationValidMailSender = new ReservationValidMailSenderFake();
+        this.createReservationCommand = new CreateReservationCommand(this.reservations, this.rooms, this.prospectDao, this.idGenerator, this.reservationRoomPayment, this.reservationValidMailSender);
     }
 
     @Test()
@@ -189,5 +190,27 @@ public class CreateReservationTest {
         );
 
         assertThrows(RoomNotFoundException.class , () -> this.createReservationCommand.execute(reservation));
+    }
+
+    @Test()
+    public void TheReservationShouldBeCreated() throws UnavailableRoomException, InvalidProspectAvailabilityException, NotEnoughCapacityException, RoomNotFoundException, ReservationAtLeastOneHourBeforeException, ProspectNotFoundException, ReservationInPastException {
+        LocalDateTime startingTime = LocalDateTime.of(2025, 1, 1, 9, 30);
+        LocalDateTime endingTime = LocalDateTime.of(2025, 1, 1, 10, 30);
+
+        CreateReservation reservation = new CreateReservation(
+                startingTime,
+                endingTime,
+                "1",
+                "1",
+                1,
+                new String[] { "" },
+                ""
+        );
+
+        Reservation reservationCreated = this.createReservationCommand.execute(reservation);
+
+        assertTrue(reservationCreated.getTimeWindow().equals(new TimeWindow(startingTime, endingTime)));
+
+        //assertThrows(RoomNotFoundException.class , () -> this.createReservationCommand.execute(reservation));
     }
 }

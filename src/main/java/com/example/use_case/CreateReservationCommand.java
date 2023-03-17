@@ -5,28 +5,36 @@ import com.example.model.room.RoomExistingValidation;
 import com.example.model.room.RoomId;
 import com.example.model.room.Rooms;
 import com.example.use_case.common.IdGenerator;
+import com.example.use_case.common.ReservationRoomPayment;
+import com.example.use_case.common.ReservationValidMailSender;
 import com.example.use_case.exceptions.*;
 
 public class CreateReservationCommand {
     private final Reservations reservations;
     private final Rooms rooms;
     private final ProspectDao prospectDao;
-
     private final IdGenerator idGenerator;
+    private final ReservationRoomPayment reservationRoomPayment;
+
+    private final ReservationValidMailSender reservationValidMailSender;
 
     public CreateReservationCommand(
         Reservations reservations,
         Rooms rooms,
         ProspectDao prospectDao,
-        IdGenerator idGenerator
+        IdGenerator idGenerator,
+        ReservationRoomPayment reservationRoomPayment,
+        ReservationValidMailSender reservationValidMailSender
     ) {
         this.reservations = reservations;
         this.rooms = rooms;
         this.prospectDao = prospectDao;
         this.idGenerator = idGenerator;
+        this.reservationRoomPayment = reservationRoomPayment;
+        this.reservationValidMailSender = reservationValidMailSender;
     }
 
-    public void execute(CreateReservation createReservation) throws
+    public Reservation execute(CreateReservation createReservation) throws
             InvalidProspectAvailabilityException,
             ReservationInPastException,
             ReservationAtLeastOneHourBeforeException,
@@ -65,5 +73,12 @@ public class CreateReservationCommand {
 
         // le nombre de personne de la réservation doit-être inferieur ou égal à la capcité max sur le créneau de la room
         reservation.checkReservationFitInRoomCapacity(this.rooms.getById(roomId).getCapacity());
+
+        this.reservationRoomPayment.pay(prospectId, roomId, reservation.getTimeWindow());
+
+        this.reservations.create(reservation);
+        this.reservationValidMailSender.send(roomId, reservation);
+
+        return reservation;
     }
 }

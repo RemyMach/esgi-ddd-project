@@ -28,11 +28,6 @@ public class ReservationsInMemory implements Reservations {
     }
 
     @Override
-    public Reservation read(String id) {
-        return null;
-    }
-
-    @Override
     public List<Reservation> read() {
         return this.reservations;
     }
