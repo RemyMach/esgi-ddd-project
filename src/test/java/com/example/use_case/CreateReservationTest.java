@@ -220,6 +220,6 @@ public class CreateReservationTest {
         assertEquals(reason, reservationCreated.getDescription());
 
         verify(paymentService).pay(any(ProspectId.class), any(RoomId.class), any(TimeWindow.class));
-        verify(notificationService).send(any(RoomId.class), any(Reservation.class));
+        verify(notificationService).send(any(Reservation.class));
     }
 }
