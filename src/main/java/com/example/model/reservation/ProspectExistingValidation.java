@@ -12,7 +12,7 @@ public class ProspectExistingValidation {
 
     public void check(ProspectId id) throws ProspectNotFoundException {
         if (!this.prospectDao.exists(id)) {
-            throw new ProspectNotFoundException("Prospect not found");
+            throw new ProspectNotFoundException("The prospect is not found");
         }
     }
 }
