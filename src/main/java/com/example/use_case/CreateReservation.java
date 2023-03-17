@@ -8,6 +8,5 @@ public record CreateReservation (
     String roomId,
     String prospectId,
     int numberOfPeople,
-    String[] emailInvitationList,
     String reservationDescription
 ) {}

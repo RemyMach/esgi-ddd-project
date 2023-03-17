@@ -7,10 +7,19 @@ public class TimeWindow {
     private final LocalDateTime start;
     private final LocalDateTime end;
 
-    public TimeWindow(LocalDateTime start, LocalDateTime end) {
+    private TimeWindow(LocalDateTime start, LocalDateTime end) {
         this.start = start;
         this.end = end;
     }
+
+    public static TimeWindow of(LocalDateTime start, LocalDateTime end) {
+        if (start.isAfter(end)) {
+            throw new IllegalArgumentException("Start time must be before end time");
+        }
+        return new TimeWindow(start, end);
+    }
+
+
 
     public LocalDateTime getStart() {
         return start;

@@ -55,7 +55,7 @@ public class CreateReservationCommand {
 
         final Reservation reservation = new Reservation(
                 new ReservationId(idGenerator.generate()),
-                new TimeWindow(createReservation.startedAt(), createReservation.endedAt()),
+                TimeWindow.of(createReservation.startedAt(), createReservation.endedAt()),
                 roomId,
                 prospectId,
                 createReservation.numberOfPeople(),
@@ -65,11 +65,11 @@ public class CreateReservationCommand {
 
         // un prospect ne peux réserver que si il a pas de résa à ce créneau
         CheckProspectAvailability checkProspectAvailability = new CheckProspectAvailability(this.reservations);
-        checkProspectAvailability.check(new TimeWindow(createReservation.startedAt(), createReservation.endedAt()), prospectId);
+        checkProspectAvailability.check(TimeWindow.of(createReservation.startedAt(), createReservation.endedAt()), prospectId);
 
         // la room doit-être dispo
         CheckRoomTimeWindowAvailability checkRoomTimeWindowAvailability = new CheckRoomTimeWindowAvailability(this.reservations);
-        checkRoomTimeWindowAvailability.check(roomId, new TimeWindow(createReservation.startedAt(), createReservation.endedAt()));
+        checkRoomTimeWindowAvailability.check(roomId, TimeWindow.of(createReservation.startedAt(), createReservation.endedAt()));
 
         // le nombre de personne de la réservation doit-être inferieur ou égal à la capcité max sur le créneau de la room
         reservation.checkReservationFitInRoomCapacity(this.rooms.getById(roomId).getCapacity());

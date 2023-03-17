@@ -45,7 +45,6 @@ public class CreateReservationTest {
                 "1",
                 "1",
                 2,
-                new String[] {""},
                 ""
         );
 
@@ -60,7 +59,6 @@ public class CreateReservationTest {
                 "1",
                 "1",
                 2,
-                new String[] {""},
                 ""
         );
 
@@ -75,7 +73,6 @@ public class CreateReservationTest {
                 "1",
                 "1",
                 2,
-                new String[] {""},
                 ""
         );
 
@@ -95,7 +92,6 @@ public class CreateReservationTest {
                 "1",
                 "1",
                 2,
-                new String[] {""},
                 ""
         );
 
@@ -115,7 +111,6 @@ public class CreateReservationTest {
                 "1",
                 "1",
                 2,
-                new String[] {""},
                 ""
         );
 
@@ -130,7 +125,6 @@ public class CreateReservationTest {
                 "2",
                 "2",
                 2,
-                new String[] {""},
                 ""
         );
 
@@ -148,7 +142,6 @@ public class CreateReservationTest {
                 "1",
                 "1",
                 5_000,
-                new String[] { "" },
                 ""
         );
 
@@ -166,7 +159,6 @@ public class CreateReservationTest {
                 "1",
                 "-1",
                 2,
-                new String[] { "" },
                 ""
         );
 
@@ -184,7 +176,6 @@ public class CreateReservationTest {
                 "-1",
                 "1",
                 2,
-                new String[] { "" },
                 ""
         );
 
@@ -202,14 +193,11 @@ public class CreateReservationTest {
                 "1",
                 "1",
                 1,
-                new String[] { "" },
                 ""
         );
 
         Reservation reservationCreated = this.createReservationCommand.execute(reservation);
 
-        assertTrue(reservationCreated.getTimeWindow().equals(new TimeWindow(startingTime, endingTime)));
-
-        //assertThrows(RoomNotFoundException.class , () -> this.createReservationCommand.execute(reservation));
+        assertTrue(reservationCreated.getTimeWindow().equals(TimeWindow.of(startingTime, endingTime)));
     }
 }
