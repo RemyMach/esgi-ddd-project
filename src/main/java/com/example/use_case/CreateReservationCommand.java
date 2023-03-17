@@ -9,6 +9,8 @@ import com.example.use_case.common.ReservationRoomPayment;
 import com.example.use_case.common.ReservationValidMailSender;
 import com.example.use_case.exceptions.*;
 
+import java.util.List;
+
 public class CreateReservationCommand {
     private final Reservations reservations;
     private final Rooms rooms;
@@ -52,10 +54,10 @@ public class CreateReservationCommand {
         // le prospect doit exister
         final ProspectExistingValidation prospectExistingValidation = new ProspectExistingValidation(this.prospectDao);
         prospectExistingValidation.check(prospectId);
-
+        final TimeWindow timeWindowCandidate = TimeWindow.of(createReservation.startedAt(), createReservation.endedAt());
         final Reservation reservation = new Reservation(
                 new ReservationId(idGenerator.generate()),
-                TimeWindow.of(createReservation.startedAt(), createReservation.endedAt()),
+                timeWindowCandidate,
                 roomId,
                 prospectId,
                 createReservation.numberOfPeople(),
@@ -64,8 +66,11 @@ public class CreateReservationCommand {
         reservation.checkIfIsValid();
 
         // un prospect ne peux réserver que si il a pas de résa à ce créneau
-        CheckProspectAvailability checkProspectAvailability = new CheckProspectAvailability(this.reservations);
-        checkProspectAvailability.check(TimeWindow.of(createReservation.startedAt(), createReservation.endedAt()), prospectId);
+        List<Reservation> reservationsAlreadyBookedForTheProspect = this.reservations.getReservationsByProspectForADate(prospectId, timeWindowCandidate.getStart().toLocalDate());
+        List<TimeWindow> timeWindowsAlreadyBookedForTheProspect = reservationsAlreadyBookedForTheProspect.stream().map(Reservation::getTimeWindow).toList();
+        if(timeWindowCandidate.overlaps(timeWindowsAlreadyBookedForTheProspect)) {
+            throw new InvalidProspectAvailabilityException("Le prospect a déjà une réservation à ce créneau");
+        }
 
         // la room doit-être dispo
         CheckRoomTimeWindowAvailability checkRoomTimeWindowAvailability = new CheckRoomTimeWindowAvailability(this.reservations);
