@@ -1,6 +1,7 @@
 package com.example.use_case;
 
 import com.example.model.reservation.*;
+import com.example.model.room.RoomId;
 import com.example.model.room.Rooms;
 import com.example.use_case.common.IdGenerator;
 import com.example.use_case.common.ReservationRoomPayment;
@@ -9,13 +10,18 @@ import com.example.use_case.exceptions.*;
 import infrastructure.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CreateReservationTest {
     Reservations reservations;
     Rooms rooms;
@@ -23,8 +29,11 @@ public class CreateReservationTest {
     CreateReservationCommand createReservationCommand;
     IdGenerator idGenerator;
     ReservationRoomPayment reservationRoomPayment;
-
     ReservationValidMailSender reservationValidMailSender;
+    @Mock
+    ReservationRoomPayment paymentService;
+    @Mock
+    ReservationValidMailSender notificationService;
 
     @Before()
     public void setUp() {
@@ -182,22 +191,35 @@ public class CreateReservationTest {
         assertThrows(RoomNotFoundException.class , () -> this.createReservationCommand.execute(reservation));
     }
 
-    @Test()
+    @Test
     public void TheReservationShouldBeCreated() throws UnavailableRoomException, InvalidProspectAvailabilityException, NotEnoughCapacityException, RoomNotFoundException, ReservationAtLeastOneHourBeforeException, ProspectNotFoundException, ReservationInPastException {
         LocalDateTime startingTime = LocalDateTime.of(2025, 1, 1, 9, 30);
         LocalDateTime endingTime = LocalDateTime.of(2025, 1, 1, 10, 30);
+        String roomId = "1";
+        String prospectId = "1";
+        int numberOfPeople = 1;
+        String reason = "";
 
         CreateReservation reservation = new CreateReservation(
                 startingTime,
                 endingTime,
-                "1",
-                "1",
-                1,
-                ""
+                roomId,
+                prospectId,
+                numberOfPeople,
+                reason
         );
 
-        Reservation reservationCreated = this.createReservationCommand.execute(reservation);
+        CreateReservationCommand mockedCreateReservationCommand = new CreateReservationCommand(this.reservations, this.rooms, this.prospectDao, this.idGenerator, paymentService, notificationService);
 
-        assertTrue(reservationCreated.getTimeWindow().equals(TimeWindow.of(startingTime, endingTime)));
+        Reservation reservationCreated = mockedCreateReservationCommand.execute(reservation);
+
+        assertEquals(reservationCreated.getTimeWindow(), TimeWindow.of(startingTime, endingTime));
+        assertEquals(roomId, reservationCreated.getRoomId().getValue());
+        assertEquals(prospectId, reservationCreated.getProspectId().getValue());
+        assertEquals(numberOfPeople, reservationCreated.getNumberOfPeople());
+        assertEquals(reason, reservationCreated.getDescription());
+
+        verify(paymentService).pay(any(ProspectId.class), any(RoomId.class), any(TimeWindow.class));
+        verify(notificationService).send(any(Reservation.class));
     }
 }
