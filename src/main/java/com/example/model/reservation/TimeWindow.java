@@ -1,6 +1,6 @@
 package com.example.model.reservation;
 
-import com.example.use_case.exceptions.InvalidProspectAvailabilityException;
+import com.example.use_case.exceptions.TimeWindowIllegalEndDateException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,9 +15,9 @@ public class TimeWindow {
         this.end = end;
     }
 
-    public static TimeWindow of(LocalDateTime start, LocalDateTime end) {
+    public static TimeWindow of(LocalDateTime start, LocalDateTime end) throws TimeWindowIllegalEndDateException {
         if (start.isAfter(end)) {
-            throw new IllegalArgumentException("Start time must be before end time");
+            throw new TimeWindowIllegalEndDateException("Start time must be before end time");
         }
         return new TimeWindow(start, end);
     }
@@ -35,8 +35,6 @@ public class TimeWindow {
 
         return timeWindowIsOverlapping;
     }
-
-
 
     public LocalDateTime getStart() {
         return start;

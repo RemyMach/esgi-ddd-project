@@ -35,7 +35,7 @@ public class CreateReservationTest {
     ReservationValidMailSender notificationService;
 
     @Before()
-    public void setUp() {
+    public void setUp() throws TimeWindowIllegalEndDateException {
         this.reservations = new ReservationsInMemory();
         this.rooms = new RoomsInMemory();
         this.prospectDao = new ProspectDaoInMemory();
@@ -88,9 +88,27 @@ public class CreateReservationTest {
     }
 
     @Test()
+    public void AProspectCantDoAReservationIfEndDateIsBeforeStartDate() {
+
+        LocalDateTime startedDate = LocalDateTime.now().plus(1, ChronoUnit.DAYS);
+        LocalDateTime endedAt = LocalDateTime.now().plus(1, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
+
+        CreateReservation createReservation = new CreateReservation(
+                startedDate,
+                endedAt,
+                "1",
+                "1",
+                2,
+                ""
+        );
+
+        assertThrows(TimeWindowIllegalEndDateException.class , () -> this.createReservationCommand.execute(createReservation));
+    }
+
+    @Test()
     public void AProspectCantDoAReservationInPast() {
 
-        LocalDateTime startedDate = LocalDateTime.now().minus(1, java.time.temporal.ChronoUnit.DAYS).minus(1, java.time.temporal.ChronoUnit.HOURS);
+        LocalDateTime startedDate = LocalDateTime.now().minus(1, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
         LocalDateTime endedAt = LocalDateTime.now().minus(1, ChronoUnit.DAYS);
 
 
@@ -191,7 +209,7 @@ public class CreateReservationTest {
     }
 
     @Test
-    public void TheReservationShouldBeCreated() throws UnavailableRoomException, InvalidProspectAvailabilityException, NotEnoughCapacityException, RoomNotFoundException, ReservationAtLeastOneHourBeforeException, ProspectNotFoundException, ReservationInPastException {
+    public void TheReservationShouldBeCreated() throws UnavailableRoomException, InvalidProspectAvailabilityException, NotEnoughCapacityException, RoomNotFoundException, ReservationAtLeastOneHourBeforeException, ProspectNotFoundException, ReservationInPastException, TimeWindowIllegalEndDateException {
         LocalDateTime startingTime = LocalDateTime.of(2025, 1, 1, 9, 30);
         LocalDateTime endingTime = LocalDateTime.of(2025, 1, 1, 10, 30);
         String roomId = "1";

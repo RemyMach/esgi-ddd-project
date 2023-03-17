@@ -42,7 +42,7 @@ public class CreateReservationCommand {
             ReservationAtLeastOneHourBeforeException,
             UnavailableRoomException,
             NotEnoughCapacityException,
-            ProspectNotFoundException, RoomNotFoundException {
+            ProspectNotFoundException, RoomNotFoundException, TimeWindowIllegalEndDateException {
 
         final RoomId roomId = new RoomId(createReservation.roomId());
         final ProspectId prospectId = new ProspectId(createReservation.prospectId());

@@ -2,6 +2,7 @@ package infrastructure;
 
 import com.example.model.reservation.*;
 import com.example.model.room.RoomId;
+import com.example.use_case.exceptions.TimeWindowIllegalEndDateException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +20,9 @@ public class ReservationsInMemory implements Reservations {
             new Reservation(new ReservationId("8"), TimeWindow.of(LocalDateTime.of(2024, 1, 1, 17, 0), LocalDateTime.of(2024, 1, 1, 18, 0)), new RoomId("2"), new ProspectId("1"), 1, "desc"),
             new Reservation(new ReservationId("9"), TimeWindow.of(LocalDateTime.of(2024, 1, 1, 18, 0), LocalDateTime.of(2024, 1, 1, 19, 0)), new RoomId("2"), new ProspectId("1"), 1, "desc")
     ));
+
+    public ReservationsInMemory() throws TimeWindowIllegalEndDateException {
+    }
 
     @Override
     public Reservation create(Reservation reservation) {
